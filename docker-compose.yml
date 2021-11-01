@@ -1,0 +1,20 @@
+version: '3'
+services:
+  chrome:
+    image: selenium/standalone-chrome:latest
+    volumes:
+      - /dev/shm:/dev/shm
+    ports:
+      - "4444:4444"
+  python:
+    depends_on:
+      - chrome
+    image: python:latest
+    working_dir: /usr/app
+    volumes:
+      - ./take_screenshots.py:/usr/app/take_screenshots.py
+      - ./urls.txt:/usr/app/urls.txt
+      - ./:/usr/app/screenshots/
+    command: >
+      bash -c 'pip install selenium
+      && python take_screenshots.py'
